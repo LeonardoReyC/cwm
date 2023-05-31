@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+<!-- inherit personalization form viw-->
+    <record id="cwm.form_customer_inherit" model="ir.ui.view">
+      <field name="name">CWM Customers</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+<!-- Replace or removed fields -->
+        <field name="function" position="replace"/>
+        <field name="website" position="replace"/>
+        <field name="category_id" position="replace"/>
+        <xpath expr="//notebook/page[@name='sales_purchases']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+<!-- Added fields -->
+         <notebook position="inside">
+            <page string="Cars">
+                <field name="cars_ids"/>
+            </page>
+        </notebook>
+      </field>
+    </record>
+
+    <!--invisible="1"-->
+
+
+<!-- Action form menu-->
+    <record model="ir.actions.act_window" id="cwm.action_customer">
+      <field name="name">Customer</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+
+<!-- Menu Items -->
+    <menuitem name="Customer" id="cwm.menu_customer" parent="cwm.menu_root"
+              action="cwm.action_customer" sequence="30"/>
+
+  </data>
+</odoo>

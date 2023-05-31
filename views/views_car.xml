@@ -1,0 +1,176 @@
+<odoo>
+  <data>
+
+    <!-- Tree View -->
+    <record model="ir.ui.view" id="cwm.list_car">
+      <field name="name">Car list</field>
+      <field name="model">cwm.car</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="plate_number"/>
+          <field name="brand_id"/>
+          <field name="model_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Form View -->
+    <record model="ir.ui.view" id="cwm.form_car">
+      <field name="name">Car form</field>
+      <field name="model">cwm.car</field>
+      <field name="arch" type="xml">
+        <form string="Cars">
+          <sheet>
+            <field name="picture" widget="image" class="oe_avatar"/>
+            <div>
+              <h1>
+                <field name="plate_number"  placeholder="Plate Number"/>
+              </h1>
+            </div>
+            <group>
+              <field name="vin_number"/>
+              <field name="brand_id"/>
+              <field name="model_id" domain="[('brand_id','=',brand_id)]"/>
+              <field name="owner"/>
+              <field name="state"/>
+              <field name="repair_ids"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Kanban View -->
+
+    <record id="view_cwm_cars_kanban" model="ir.ui.view">
+      <field name="name">cwm.cars.kanban</field>
+      <field name="model">cwm.car</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="model_id"/>
+          <field name="plate_number"/>
+          <field name="brand_id"/>
+          <field name="picture"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="o_kanban_record_has_image_fill oe_kanban_global_click o_cwm_cars_kanban">
+                <t t-if="record.picture.raw_value">
+                  <img class="o_kanban_image_fill_left d-none d-md-block"
+                       t-attf-style="background-image:url('#{kanban_image('cwm.car', 'picture', record.plate_number.raw_value)}')"/>
+                </t>
+                <t t-else="">
+                  <img class="o_kanban_image" alt="Avatar" t-att-src='_s + "/odoo/base/static/img/avatar.png"'/>
+                </t>
+                <div class="o_kanban_details">
+                  <strong class="o_kanban_record_title">
+                    <field name="plate_number"/>
+                  </strong>
+                  <div class="o_kanban_tags_section">
+                    <ul>
+                      <li>Brand : <field name="brand_id"/></li>
+                      <li>Model : <field name="model_id"/></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+
+    <!--<record id="view_cwm_cars_kanban" model="ir.ui.view">
+      <field name="name">cwm.cars.kanban</field>
+      <field name="model">cwm.car</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="plate_number"/>
+          <field name="model_id"/>
+          <field name="brand_id"/>
+          <templates>
+            <t t-name="plantilla_kan">
+              <div class="o_kanban_record">
+                <div class="o_kanban_title">
+                   <field name="plate_number"/>
+                </div>
+                <div class="o_kanban_content">
+                  <field name="model_id"/>
+                  <field name="brand_id"/>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>-->
+
+
+
+    <!--<record id="view_cwm_cars_kanban" model="ir.ui.view">
+    <field name="name">cwm.cars.kanban</field>
+    <field name="model">cwm.car</field>
+    <field name="arch" type="xml">
+        <kanban>
+            <field name="model_id"/>
+            <field name="plate_number"/>
+            <field name="brand_id"/>
+            <field name="picture"/>
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_cwm_view_cwm_cars_kanban">
+                        <div class="o_kanban_image_fill_left d-none d-md-block"
+                             t-attf-style="background-image:url('#{kanban_image('cwm.car', 'picture', record.plate_number.raw_value)}')">
+                            <img class="o_kanban_image" alt="Avatar"
+                                 t-att-src="_s + '/base/static/img/avatar.png'"/>
+                        </div>
+                        <div class="o_kanban_details">
+                            <strong class="o_kanban_record_title">
+                                <field name="plate_number"/>
+                            </strong>
+                            <div class="o_kanban_tags_section">
+                                <ul>
+                                    <li>Brand: <field name="brand_id"/></li>
+                                    <li>Model: <field name="model_id"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>-->
+
+
+
+    <!-- Acción para la vista Kanban -->
+    <!--<record id="action_cwm_cars_kanban" model="ir.actions.act_window">
+        <field name="name">Cars Kanban</field>
+        <field name="res_model">cwm.car</field>
+        <field name="view_mode">kanban</field>
+    </record>-->
+
+    <!-- Menú para acceder a la vista Kanban -->
+    <!--<menuitem id="menu_cwm_cars_kanban" name="Cars Kanban" parent="cwm.menu_root"/>
+
+    <menuitem id="menu_cwm_cars_kanban_sub" name="Cars Kanban" parent="menu_cwm_cars_kanban"
+              action="action_cwm_cars_kanban"/>-->
+
+
+
+
+
+    <!-- Action -->
+    <record model="ir.actions.act_window" id="cwm.action_car">
+      <field name="name">Car window</field>
+      <field name="res_model">cwm.car</field>
+      <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <!-- Menú -->
+    <menuitem name="Cars" id="cwm.menu_car" parent="cwm.menu_root"
+          action="cwm.action_car" sequence="10"/>
+
+  </data>
+</odoo>

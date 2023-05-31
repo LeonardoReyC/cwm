@@ -1,0 +1,41 @@
+<odoo>
+  <data>
+<!-- Action -->
+    <record model="ir.actions.act_window" id="cwm.action_workers">
+      <field name="name">Workers window</field>
+      <field name="res_model">hr.employee</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+<!-- Menú -->
+    <menuitem name="Workers" id="cwm.menu_workers" parent="cwm.menu_root"
+          action="cwm.action_workers" sequence="40"/>
+
+
+
+<!-- inherit personalization form viw-->
+    <record id="cwm.form_workers_inherit" model="ir.ui.view">
+      <field name="name">CWM Workers</field>
+      <field name="model">hr.employee</field>
+      <field name="inherit_id" ref="hr.view_employee_form"/>
+      <field name="arch" type="xml">
+<!-- Replace or removed fields -->
+        <field name="coach_id" position="replace"/>
+        <field name="work_location_id" position="replace"/>
+        <field name="tz" position="replace"/>
+        <!--<xpath expr="//notebook/page[@name='sales_purchases']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>-->
+<!-- Added fields -->
+         <!--<notebook position="inside">
+            <page string="Cars">
+                <field name="cars_ids"/>
+            </page>
+        </notebook>-->
+      </field>
+    </record>
+
+
+  </data>
+</odoo>

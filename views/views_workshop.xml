@@ -1,0 +1,77 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <!-- vista tree -->
+    <record model="ir.ui.view" id="cwm.cwm_list">
+      <field name="name">CWM list</field>
+      <field name="model">cwm.cwm</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="address"/>
+        </tree>
+      </field>
+    </record>
+
+    <!--Vista formulario-->
+
+    <record model="ir.ui.view" id="cwm.cwm_form">
+      <field name="name">CWM form</field>
+      <field name="model">cwm.cwm</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="address"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="cwm.action_window">
+      <field name="name">CWM window</field>
+      <field name="res_model">cwm.cwm</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="cwm.action_server">
+      <field name="name">CWM server</field>
+      <field name="model_id" ref="model_cwm_cwm"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+    <menuitem name="CWM" id="cwm.menu_root" action="cwm.action_window"/>/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Settings" id="cwm.settings" parent="cwm.menu_root" sequence="100"/>
+<!--
+    <menuitem name="Menu 2" id="cwm.menu_2" parent="cwm.menu_root"/>
+-->
+    <!-- actions -->
+
+<!--
+    <menuitem name="CWM" id="cwm.menu" parent="cwm.menu_root"
+              action="cwm.action_window"/>
+
+    <menuitem name="Server to list" id="cwm" parent="cwm.menu_2"
+              action="cwm.action_server"/>
+-->
+  </data>
+</odoo>
