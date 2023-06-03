@@ -23,7 +23,7 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base',
-                'hr'
+                'hr',
     ],
 
     # always loaded
@@ -36,8 +36,10 @@
         'views/view_workers.xml',
         'views/templates.xml',
         'views/views_sequences.xml',
+        'data/data.xml',
         'views/views_repair.xml',
-        'security/ir.model.access.csv'
+        'views/views_rates.xml',
+        'security/ir.model.access.csv',
     ],
     # only loaded in demonstration mode
     'demo': [

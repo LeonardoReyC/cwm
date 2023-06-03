@@ -8,10 +8,6 @@ class CwmCars(models.Model):
     _description = 'Cars'
     _rec_name = "plate_number"
 
-    id = fields.Integer(
-
-    )
-
     plate_number = fields.Char(
         string="Plate Number",
         required=True,
@@ -46,6 +42,10 @@ class CwmCars(models.Model):
         ('3', 'Waiting for spare parts'),
         ('4', 'Repaired'),
         ('5', 'Delivered')],
+        string="State",
+        default='1',
+        group_expand='_expand_states',
+        index=True,
         required=True
     )
     repair_ids = fields.One2many(
@@ -53,7 +53,8 @@ class CwmCars(models.Model):
         inverse_name="car_id",
         string="Repairs"
     )
-    def _compute_xml_id(self):
-        res= self.get_external_
+
+    def _expand_states(self, state, domain, order):
+        return [key for key, val in type(self).state.selection]
 
 #TODO One2many repairs

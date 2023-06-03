@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+
+    <!--Sequences-->
+      <record id="01" model="cwm.sequence">
+        <field name="name">Repairs</field>
+        <field name="prefix">Rep</field>
+      </record>
+
+    <!--Rates-->
+    <record id="02" model="cwm.rates">
+        <field name="name">General</field>
+        <field name="notes">This rate is aplicable for general customers</field>
+    </record>
+
+  </data>
+</odoo>

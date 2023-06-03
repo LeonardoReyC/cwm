@@ -5,4 +5,5 @@ access_cwm_car_brand,cwm.car.brand,model_cwm_car_brand,base.group_user,1,1,1,1
 access_cwm_car_model,cwm.car.model,model_cwm_car_model,base.group_user,1,1,1,1
 access_cwm_sequence,cwm.sequence,model_cwm_sequence,base.group_user,1,1,1,1
 access_cwm_repair,cwm.repair,model_cwm_repair,base.group_user,1,1,1,1
-
+access_cwm_rates,cwm.rates,model_cwm_rates,base.group_user,1,1,1,1
+access_cwm_repair_tasks,cwm.repair.tasks,model_cwm_repair_task,base.group_user,1,1,1,1
