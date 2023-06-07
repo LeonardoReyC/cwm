@@ -1,5 +1,6 @@
 <odoo>
   <data>
+
 <!-- Action -->
     <record model="ir.actions.act_window" id="cwm.action_workers">
       <field name="name">Workers window</field>
@@ -22,17 +23,31 @@
       <field name="arch" type="xml">
 <!-- Replace or removed fields -->
         <field name="coach_id" position="replace"/>
+        <field name="address_id" position="replace"/>
         <field name="work_location_id" position="replace"/>
         <field name="tz" position="replace"/>
+        <xpath expr="//page[@name='public']" position="replace">
+          <page name="public" string="Work Information">
+            <group string="Schedule and salary">
+              <field name="resource_calendar_id" required="1"/>
+              <field name="salary_hour"/>
+              <field name="currency_id" invisible="1"/>
+            </group>
+            <group string="Ratios">
+            </group>
+          </page>
+        </xpath>
         <!--<xpath expr="//notebook/page[@name='sales_purchases']" position="attributes">
           <attribute name="invisible">1</attribute>
         </xpath>-->
 <!-- Added fields -->
-         <!--<notebook position="inside">
-            <page string="Cars">
-                <field name="cars_ids"/>
+         <notebook position="inside">
+            <page string="Repair Tasks">
+                <field name="task_ids"/>
             </page>
-        </notebook>-->
+        </notebook>
+
+        <!--//field[@name='resource_calendar_id'] -->
       </field>
     </record>
 

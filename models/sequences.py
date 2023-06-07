@@ -36,17 +36,14 @@ class CwmSequence(models.Model):
     )
     suffix = fields.Char(
         string="Sufix",
-        required=True,
         help="Suffix set the actual year"
     )
     actual_value = fields.Integer(
         string="Actual Value",
-        required=True,
         help="The last number used"
     )
     next_value = fields.Integer(
         string="Next Value",
-        required=True,
         help="The Next value"
     )
 

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#TODO odoo.odoo
+# TODO odoo.odoo
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-
 
 class CwmRepair(models.Model):
     _name = 'cwm.repair'
@@ -60,7 +59,73 @@ class CwmRepair(models.Model):
         inverse_name="repair_id",
         string="Tasks Associated"
     )
+    time_spent = fields.Float(
+        string="Total Time spent",
+        compute="_compute_spent_time",
+    )
+    status = fields.Selection(
+        [('1', 'Pending start'),
+         ('2', 'Started'),
+         ('3', 'Stopped'),
+         ('4', 'Time exceeded'),
+         ('5', 'Completed')],
+        string="Repair status",
+        group_expand='_expand_states',
+        default='1',
+        index=True,
+        required=True
+    )
+    profit = fields.Monetary(
+        string="Profit",
+        compute="_compute_profit",
+        currency_field="currency_id",
+    )
+    color = fields.Integer(
+        string="color",
+        compute="_compute_color",
+    )
 
+    @api.constrains('profit', 'budget')
+    def _compute_color(self):
+        for rec in self:
+            if rec.profit < 0 or rec.budget < 0:
+                rec.color = 9
+                continue
+            control = (rec.profit * 100)/ rec.budget
+            if control >= 0 and control < 20:
+                rec.color = 1
+            elif control >= 20 and control < 60:
+                rec.color = 3
+            else:
+                rec.color = 10
+
+    def _expand_states(self, state, domain, order):
+        return [key for key, val in type(self).status.selection]
+
+    @api.depends('time_spent', 'allotted_time')
+    def _compute_profit(self):
+        for rep in self:
+            rep.profit = 0.0
+            rep.profit = rep.budget
+            for task in rep.task_ids:
+                rep.profit -= task.cost
+
+    @api.onchange('time_spent', 'allotted_time', 'status')
+    def _onchange_time_spent_allotted_time(self):
+        if self.time_spent <= 0:
+            self.status = '1'  # Pending start
+        elif 0 < self.time_spent < self.allotted_time:
+            self.status = '2'  # Started
+            self.car_id.state = '2'
+        elif self.time_spent > self.allotted_time:
+            self.status = '4'  # Completed
+
+    @api.depends('time_spent', 'allotted_time', 'task_ids')
+    def _compute_spent_time(self):
+        for rep in self:
+            rep.time_spent = 0.0
+            for task in rep.task_ids:
+                rep.time_spent += task.time_spent
 
     @api.depends('budget', 'allotted_time')
     def _compute_budget(self):
@@ -86,27 +151,31 @@ class CwmRepairTasks(models.Model):
         required=True
     )
     time_spent = fields.Float(
-        string="Minutes Spent",
+        string="Time Spent",
         required=True,
-        help="Time spent in minutes"
-    )
-    time_to_compute = fields.Float(
-        string="Hour units",
-        compute="_compute_hour_units",
+        help="Time spent on the operation"
     )
     repair_id = fields.Many2one(
         comodel_name='cwm.repair',
+        required=True,
         string='Repair',
     )
-
-    @api.depends('time_spent')
-    def _compute_hour_units(self):
-        for rec in self:
-            rec.time_to_compute = (rec.time_spent / 60.00)
-
-    """
-    worker_ids = fields.Many2many(
-        comodel_name='cwm.workers',
-        string='Workers'
+    worker_id = fields.Many2one(
+        comodel_name='hr.employee',
+        required=True,
+        string='Worker',
     )
-    """
+    cost = fields.Monetary(
+        string="Cost",
+        currency_field="currency_id",
+    )
+    currency_id = fields.Many2one(
+        comodel_name='res.currency',
+        string='Currency',
+        default=lambda self: self.env.ref('base.EUR')
+    )
+
+    @api.constrains('time_spent')
+    def calculate_cost(self):
+        for rec in self:
+            rec.cost = (rec.worker_id.salary_hour * rec.time_spent)

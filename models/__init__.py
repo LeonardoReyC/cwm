@@ -5,5 +5,6 @@ from . import car_brand
 from . import customer
 from . import car
 from . import sequences
+from . import workers
 from . import repairs
 from . import rates
