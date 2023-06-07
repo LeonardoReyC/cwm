@@ -1,9 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_cwm_cwm,cwm.cwm,model_cwm_cwm,base.group_user,1,1,1,1
 access_cwm_car,cwm.car,model_cwm_car,base.group_user,1,1,1,1
+access_cwm_car.stage,cwm.car.stage,model_cwm_car_stage,base.group_user,1,1,1,1
 access_cwm_car_brand,cwm.car.brand,model_cwm_car_brand,base.group_user,1,1,1,1
 access_cwm_car_model,cwm.car.model,model_cwm_car_model,base.group_user,1,1,1,1
 access_cwm_sequence,cwm.sequence,model_cwm_sequence,base.group_user,1,1,1,1
 access_cwm_repair,cwm.repair,model_cwm_repair,base.group_user,1,1,1,1
 access_cwm_rates,cwm.rates,model_cwm_rates,base.group_user,1,1,1,1
 access_cwm_repair_tasks,cwm.repair.tasks,model_cwm_repair_task,base.group_user,1,1,1,1
+access_cwm_repair_indicator,cwm.repair.indicator,model_cwm_repair_indicator,base.group_user,1,1,1,1

@@ -31,15 +31,12 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/views_workshop.xml',
-        'views/views_cars_brands_models.xml',
         'views/views_car.xml',
         'views/views_customer.xml',
-        'views/view_workers.xml',
-        'views/templates.xml',
-        'views/views_sequences.xml',
+        'views/views_workers.xml',
         'data/data.xml',
         'views/views_repair.xml',
-        'views/views_rates.xml',
+        'views/views_settings.xml',
         'security/ir.model.access.csv',
     ],
     # only loaded in demonstration mode

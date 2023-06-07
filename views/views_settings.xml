@@ -1,0 +1,276 @@
+<odoo>
+  <data>
+
+<!--
+###################################################
+############### BRAND AND MODELS###################
+-->
+    <!-- vista tree -->
+    <record model="ir.ui.view" id="cwm.list_car_brand">
+      <field name="name">Car brand list</field>
+      <field name="model">cwm.car.brand</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="cwm.list_car_model">
+      <field name="name">Car model list</field>
+      <field name="model">cwm.car.model</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="brand_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- vista form -->
+    <record model="ir.ui.view" id="cwm.form_car_brand">
+      <field name="name">Car brand form</field>
+      <field name="model">cwm.car.brand</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="model_ids"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="cwm.form_car_model">
+      <field name="name">Car model form</field>
+      <field name="model">cwm.car.model</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="brand_id"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions -->
+    <record model="ir.actions.act_window" id="cwm.action_car_brand">
+      <field name="name">Car Brand window</field>
+      <field name="res_model">cwm.car.brand</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="cwm.action_car_model">
+      <field name="name">Car Model window</field>
+      <field name="res_model">cwm.car.model</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menús Settings-->
+    <menuitem name="Brands" id="cwm.menu_car_brand" parent="cwm.settings"
+              action="cwm.action_car_brand"/>
+
+    <menuitem name="Models" id="cwm.menu_car_model" parent="cwm.settings"
+              action="cwm.action_car_model"/>
+<!--
+###################################################
+###################### RATES ######################
+-->
+    <!-- Tree view-->
+    <record model="ir.ui.view" id="cwm.list_rates">
+      <field name="name">Rates list</field>
+      <field name="model">cwm.rates</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="rate"/>
+          <field name="currency_id" invisible="1"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Form view-->
+    <record model="ir.ui.view" id="cwm.form_rates">
+      <field name="name">Rates form</field>
+      <field name="model">cwm.rates</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="rate"/>
+              <field name="notes"/>
+              <field name="repair_ids"/>
+              <field name="currency_id" invisible="1"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Actions-->
+    <record model="ir.actions.act_window" id="cwm.action_rates">
+      <field name="name">Rates window</field>
+      <field name="res_model">cwm.rates</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menú-->
+
+    <menuitem name="Rates" id="cwm.menu_rates" parent="cwm.settings"
+              action="cwm.action_rates"/>
+<!--
+###################################################
+#################### SEQUENCES ####################
+-->
+    <!-- Tree View -->
+    <record model="ir.ui.view" id="cwm.list_sequence">
+      <field name="name">Sequence list</field>
+      <field name="model">cwm.sequence</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="actual_value"/>
+          <field name="next_value"/>
+          <field name="prefix"/>
+          <field name="suffix"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Action-->
+    <record model="ir.actions.act_window" id="cwm.action_sequence">
+      <field name="name">Sequence window</field>
+      <field name="res_model">cwm.sequence</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="cwm.action_sequence">
+      <field name="name">Sequence window</field>
+      <field name="res_model">cwm.sequence</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- Menú  -->
+
+    <menuitem name="Sequences" id="cwm.menu_sequences" parent="cwm.settings"
+              action="cwm.action_sequence"/>
+
+<!--
+###################################################
+################ REPAIR INDICATOR #################
+-->
+    <!-- Tree View -->
+    <record model="ir.ui.view" id="cwm.list_repair_indicator">
+      <field name="name">Repair indicator list</field>
+      <field name="model">cwm.repair.indicator</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" readonly="1"/>
+          <field name="limit"/>
+          <field name="assigned_color" widget="color_picker"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Tree View -->
+    <record model="ir.ui.view" id="cwm.form_repair_indicator">
+      <field name="name">Repair indicator form</field>
+      <field name="model">cwm.repair.indicator</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name" readonly="1"/>
+              <field name="limit"/>
+              <field name="assigned_color" widget="color_picker"/>
+            </group>
+            <group>
+              <field name="notes" readonly="1"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Action-->
+    <record model="ir.actions.act_window" id="cwm.action_repair_indicator">
+      <field name="name">Repair Indicator window</field>
+      <field name="res_model">cwm.repair.indicator</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menú  -->
+    <menuitem name="Repair Indicator" id="cwm.menu_repair_indicator" parent="cwm.settings"
+              action="cwm.action_repair_indicator"/>
+
+<!--
+###################################################
+############# INHERIT REPAIR STAGE ################
+-->
+    <menuitem name="Repair Stages" id="cwm.menu_repair_stages" parent="cwm.settings"
+              action="project.project_project_stage_configure"/>
+
+<!--
+###################################################
+#################### CAR STAGE ####################
+-->
+    <!--Tree view-->
+    <record id="cwm.list_car_stage" model="ir.ui.view">
+      <field name="name">Car stage list</field>
+      <field name="model">cwm.car.stage</field>
+      <field name="arch" type="xml">
+        <tree editable="bottom" sample="1">
+          <field name="sequence" widget="handle"/>
+          <field name="name"/>
+          <field name="fold" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!--Kanban view-->
+    <record id="cwm.kanban_car_stage" model="ir.ui.view">
+      <field name="name">Car stage kanban</field>
+      <field name="model">cwm.car.stage</field>
+      <field name="arch" type="xml">
+        <kanban class="o_kanban_mobile" sample="1"
+                quick_create_view="project.project_project_stage_view_form_quick_create">
+          <field name="name"/>
+          <field name="fold"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="o_kanban_record oe_kanban_global_click">
+                <strong>
+                  <field name="name"/>
+                </strong>
+                <br/>
+                <span class="text-muted">
+                  Folded in Kanban <field name="fold"/>
+                </span>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <!-- Action-->
+    <record model="ir.actions.act_window" id="cwm.action_car_stage">
+      <field name="name">Car stage window</field>
+      <field name="res_model">cwm.car.stage</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <!-- Menú  -->
+    <menuitem name="Car Stages" id="cwm.menu_car_stage" parent="cwm.settings"
+              action="cwm.action_car_stage"/>
+
+
+  </data>
+</odoo>

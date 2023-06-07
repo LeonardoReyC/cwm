@@ -18,7 +18,7 @@ class CwmCars(models.Model):
         string="Image",
     )
     vin_number = fields.Char(
-        string="Vin Number",
+        string="Vin Num",
         required=True,
         unique=True,
         help="Unique vehícle number"
@@ -36,25 +36,18 @@ class CwmCars(models.Model):
         comodel_name="res.partner",
         string="Owner"
     )
-    state = fields.Selection(
-        [('1', 'Pending appointment'),
-        ('2', 'Under repair'),
-        ('3', 'Waiting for spare parts'),
-        ('4', 'Repaired'),
-        ('5', 'Delivered')],
-        string="State",
-        default='1',
-        group_expand='_expand_states',
-        index=True,
-        required=True
-    )
     repair_ids = fields.One2many(
         comodel_name="cwm.repair",
         inverse_name="car_id",
         string="Repairs"
     )
-
-    def _expand_states(self, state, domain, order):
-        return [key for key, val in type(self).state.selection]
-
-#TODO One2many repairs
+    stage_id = fields.Many2one(
+        string="Stage",
+        comodel_name="cwm.car.stage",
+        group_expand='_read_group_stage_ids',
+    )
+    @api.model
+    def _read_group_stage_ids(self, stages, domain, order):
+        stage_obj = self.env['cwm.car.stage']
+        folded_stages = stage_obj.search([('fold', '=', False)])
+        return folded_stages

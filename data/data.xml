@@ -13,5 +13,27 @@
         <field name="notes">This rate is aplicable for general customers</field>
     </record>
 
+    <!--Repair Indicator-->
+    <record id="03" model="cwm.repair.indicator">
+        <field name="name">Low</field>
+        <field name="notes">From 0 to this level</field>
+    </record>
+
+    <record id="04" model="cwm.repair.indicator">
+        <field name="name">Medium</field>
+        <field name="notes">from low level to this</field>
+    </record>
+
+    <record id="05" model="cwm.repair.indicator">
+        <field name="name">OK</field>
+        <field name="notes">above medium level: only color is used</field>
+    </record>
+
+    <!--Repair Stages-->
+    <record id="05" model="cwm.repair.indicator">
+        <field name="name">OK</field>
+        <field name="notes">above medium level: only color is used</field>
+    </record>
+
   </data>
 </odoo>

@@ -84,20 +84,34 @@ class CwmRepair(models.Model):
         string="color",
         compute="_compute_color",
     )
+    stage_id = fields.Many2one(
+        string="Stage",
+        comodel_name="project.project.stage",
+        group_expand='_read_group_stage_ids',
+    )
+
+    @api.model
+    def _read_group_stage_ids(self, stages, domain, order):
+        stage_obj = self.env['project.project.stage']
+        folded_stages = stage_obj.search([('fold', '=', False)])
+        return folded_stages
 
     @api.constrains('profit', 'budget')
     def _compute_color(self):
+        low = self.env['cwm.repair.indicator'].search([('name', '=', 'Low')])
+        medium = self.env['cwm.repair.indicator'].search([('name', '=', 'Medium')])
+        ok = self.env['cwm.repair.indicator'].search([('name', '=', 'OK')])
         for rec in self:
             if rec.profit < 0 or rec.budget < 0:
                 rec.color = 9
                 continue
-            control = (rec.profit * 100)/ rec.budget
-            if control >= 0 and control < 20:
-                rec.color = 1
-            elif control >= 20 and control < 60:
-                rec.color = 3
+            control = (rec.profit * 100) / rec.budget
+            if control >= 0 and control < low.limit:
+                rec.color = low.assigned_color
+            elif control >= low.limit and control < medium.limit:
+                rec.color = medium.assigned_color
             else:
-                rec.color = 10
+                rec.color = ok.assigned_color
 
     def _expand_states(self, state, domain, order):
         return [key for key, val in type(self).status.selection]

@@ -6,10 +6,10 @@
       <field name="name">cwm.cars.kanban</field>
       <field name="model">cwm.car</field>
       <field name="arch" type="xml">
-        <kanban default_group_by="state">
-          <field name="state"/>
+        <kanban default_group_by="stage_id">
           <field name="id"/>
           <field name="model_id"/>
+          <field name="stage_id"/>
           <field name="plate_number"/>
           <field name="brand_id"/>
           <field name="picture"/>
@@ -54,6 +54,7 @@
           <field name="plate_number"/>
           <field name="brand_id"/>
           <field name="model_id"/>
+          <field name="stage_id"/>
         </tree>
       </field>
     </record>
@@ -76,7 +77,7 @@
               <field name="brand_id"/>
               <field name="model_id" domain="[('brand_id','=',brand_id)]"/>
               <field name="owner"/>
-              <field name="state"/>
+              <field name="stage_id"/>
               <field name="repair_ids"/>
             </group>
           </sheet>
