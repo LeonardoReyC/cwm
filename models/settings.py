@@ -96,6 +96,12 @@ class CarBrands(models.Model):
         string="Model list"
     )
 
+    @api.onchange('name')
+    def onchange_car_brand(self):
+        if self.name:
+            self.name = self.name.capitalize()
+
+
 class CarModels(models.Model):
     _name = "cwm.car.model"
     _description = "car models of a brand"
@@ -109,6 +115,11 @@ class CarModels(models.Model):
         comodel_name="cwm.car.brand",
         string="Brand"
     )
+
+    @api.onchange('name')
+    def onchange_car_model(self):
+        if self.name:
+            self.name = self.name.capitalize()
 
 
 class CarRepairsProfitIndicator(models.Model):
@@ -139,6 +150,24 @@ class CwmCarStage(models.Model):
     _description = 'Car Stage'
     _order = 'sequence, id'
 
+    sequence = fields.Integer(
+        default=50
+    )
+    name = fields.Char(
+        required=True,
+        translate=True
+    )
+    fold = fields.Boolean(
+        string='Folded in Kanban',
+        help="If enabled, this stage will be displayed as folded in the Kanban view of your projects. "
+             "Projects in a folded stage are considered as closed."
+    )
+
+
+class CwmCarStage(models.Model):
+    _name = 'cwm.repair.stage'
+    _description = 'Repair Stage'
+    _order = 'sequence, id'
 
     sequence = fields.Integer(
         default=50
@@ -152,3 +181,25 @@ class CwmCarStage(models.Model):
         help="If enabled, this stage will be displayed as folded in the Kanban view of your projects. "
              "Projects in a folded stage are considered as closed."
     )
+
+class CwmCarStage(models.Model):
+    _name = 'cwm.color'
+    _description = 'Description color'
+
+    name = fields.Char(
+        string="color name",
+        required=True,
+        inverse='_inverse_general_color'
+    )
+    enable = fields.Boolean(
+        string="Enabled color",
+    )
+
+    def _inverse_general_color(self):
+        if self.name:
+            self.name = self.name.capitalize()
+
+    @api.onchange('name')
+    def onchange_general_color(self):
+        if self.name:
+            self.name = self.name.capitalize()

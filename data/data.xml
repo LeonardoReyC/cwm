@@ -30,10 +30,57 @@
     </record>
 
     <!--Repair Stages-->
-    <record id="05" model="cwm.repair.indicator">
-        <field name="name">OK</field>
-        <field name="notes">above medium level: only color is used</field>
+    <record id="06" model="cwm.repair.stage">
+        <field name="name">Pending start</field>
+        <field name="sequence">10</field>
     </record>
+
+    <record id="07" model="cwm.repair.stage">
+        <field name="name">Started</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <record id="08" model="cwm.repair.stage">
+        <field name="name">Stopped</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="09" model="cwm.repair.stage">
+        <field name="name">Time exceeded</field>
+        <field name="sequence">13</field>
+    </record>
+
+    <record id="10" model="cwm.repair.stage">
+        <field name="name">Completed</field>
+        <field name="sequence">14</field>
+    </record>
+
+    <!--Car Stages-->
+    <record id="11" model="cwm.car.stage">
+        <field name="name">Pending appointment</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="12" model="cwm.car.stage">
+        <field name="name">Under repair</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <record id="13" model="cwm.car.stage">
+        <field name="name">Waiting for spare parts</field>
+        <field name="sequence">12</field>
+    </record>
+
+    <record id="14" model="cwm.car.stage">
+        <field name="name">Repaired</field>
+        <field name="sequence">13</field>
+    </record>
+
+    <record id="15" model="cwm.car.stage">
+        <field name="name">Delivered</field>
+        <field name="sequence">14</field>
+    </record>
+
 
   </data>
 </odoo>

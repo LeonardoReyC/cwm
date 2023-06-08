@@ -7,7 +7,7 @@
       <field name="name">Repair kanban</field>
       <field name="model">cwm.repair</field>
       <field name="arch" type="xml">
-        <kanban default_group_by="stage_id" class="o_kanban_project_tasks" on_create="quick_create">
+        <kanban default_group_by="stage_id" class="o_kanban_project_tasks" create="true">
           <field name="time_spent"/>
           <field name="allotted_time"/>
           <field name="color"/>
@@ -63,14 +63,13 @@
               <field name="rep_num"/>
             </h1>
             <group>
-              <group>
+              <group string="Repair info">
                 <field name="sequence"/>
                 <field name="name"/>
-                <field name="status"/>
                 <field name="car_id"/>
                 <field name="stage_id"/>
               </group>
-              <group>
+              <group string="Time and economy">
                 <field name="rate_id"/>
                 <field name="allotted_time" widget="float_time"/>
                 <field name="time_spent" widget="float_time"/>

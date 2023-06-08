@@ -6,7 +6,7 @@
       <field name="name">cwm.cars.kanban</field>
       <field name="model">cwm.car</field>
       <field name="arch" type="xml">
-        <kanban default_group_by="stage_id">
+        <kanban default_group_by="stage_id" class="o_kanban_project_tasks" create="true">
           <field name="id"/>
           <field name="model_id"/>
           <field name="stage_id"/>
@@ -15,28 +15,18 @@
           <field name="picture"/>
           <templates>
             <t t-name="kanban-box">
-              <div class="o_kanban_record_has_image_fill oe_kanban_global_click o_cwm_cars_kanban">
-                <t t-if="record.picture.raw_value">
-                  <img class="o_kanban_image_fill_left d-none d-md-block"
-                       t-attf-style="background-image:url('#{kanban_image('cwm.car', 'picture', record.id.raw_value)}')" alt="image"/>
-                </t>
-                <t t-else="">
-                  <img class="o_kanban_image" t-att-src='_s + "/odoo/base/static/img/avatar.png"' alt="image"/>
-                </t>
-                <div class="o_kanban_details">
-                  <strong class="o_kanban_record_title">
-                    <field name="plate_number"/>
-                  </strong>
-                  <div class="o_kanban_tags_section">
-                    <ul>
-                      <li>
-                        <field name="brand_id"/>
-                      </li>
-                      <li>
-                        <field name="model_id"/>
-                      </li>
-                    </ul>
-                  </div>
+              <div class="o_kanban_primary oe_kanban_global_click"
+                   style="position: relative;width: 280px;height: 90px;overflow: hidden;">
+                <div class="o_kanban_image"
+                     style="position: relative;width: 50%;">
+                  <img t-att-src="kanban_image('cwm.car', 'picture',record.id.raw_value)"
+                       t-att-alt="kanban_image('cwm.car', 'name',record.id.raw_value)"/>
+                </div>
+                <div class="o_kanban_details"
+                     style="position: relative;left: 10px">
+                  <h4><field name="plate_number"/></h4>
+                  <field name="model_id"/><br/>
+                  <field name="owner"/>
                 </div>
               </div>
             </t>
@@ -54,6 +44,7 @@
           <field name="plate_number"/>
           <field name="brand_id"/>
           <field name="model_id"/>
+          <field name="body_color"/>
           <field name="stage_id"/>
         </tree>
       </field>
@@ -69,15 +60,26 @@
             <field name="picture" widget="image" class="oe_avatar"/>
             <div>
               <h1>
-                <field name="plate_number" placeholder="Plate Number"/>
+                 <field name="plate_number" placeholder="Plate Number" style="text-transform: uppercase;"/>
               </h1>
             </div>
             <group>
-              <field name="vin_number"/>
-              <field name="brand_id"/>
-              <field name="model_id" domain="[('brand_id','=',brand_id)]"/>
-              <field name="owner"/>
-              <field name="stage_id"/>
+              <group string="Vehicle Information">
+                <field name="brand_id"/>
+                <field name="model_id" domain="[('brand_id','=',brand_id)]"/>
+                <field name="registration_date"/>
+                <field name="vin_number" style="text-transform: uppercase;"/>
+                <field name="body_color"/>
+              </group>
+              <group string="Status Information">
+                <field name="next_appointment"/>
+                <field name="entry_date"/>
+                <field name="stage_id"/>
+                <field name="owner"/>
+              </group>
+            </group>
+            <separator/>
+            <group string="Repairs History">
               <field name="repair_ids"/>
             </group>
           </sheet>

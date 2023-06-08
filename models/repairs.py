@@ -63,18 +63,6 @@ class CwmRepair(models.Model):
         string="Total Time spent",
         compute="_compute_spent_time",
     )
-    status = fields.Selection(
-        [('1', 'Pending start'),
-         ('2', 'Started'),
-         ('3', 'Stopped'),
-         ('4', 'Time exceeded'),
-         ('5', 'Completed')],
-        string="Repair status",
-        group_expand='_expand_states',
-        default='1',
-        index=True,
-        required=True
-    )
     profit = fields.Monetary(
         string="Profit",
         compute="_compute_profit",
@@ -86,13 +74,13 @@ class CwmRepair(models.Model):
     )
     stage_id = fields.Many2one(
         string="Stage",
-        comodel_name="project.project.stage",
+        comodel_name="cwm.repair.stage",
         group_expand='_read_group_stage_ids',
     )
 
     @api.model
     def _read_group_stage_ids(self, stages, domain, order):
-        stage_obj = self.env['project.project.stage']
+        stage_obj = self.env['cwm.repair.stage']
         folded_stages = stage_obj.search([('fold', '=', False)])
         return folded_stages
 
@@ -124,15 +112,20 @@ class CwmRepair(models.Model):
             for task in rep.task_ids:
                 rep.profit -= task.cost
 
-    @api.onchange('time_spent', 'allotted_time', 'status')
+    @api.onchange('time_spent', 'allotted_time')
     def _onchange_time_spent_allotted_time(self):
-        if self.time_spent <= 0:
-            self.status = '1'  # Pending start
-        elif 0 < self.time_spent < self.allotted_time:
-            self.status = '2'  # Started
-            self.car_id.state = '2'
-        elif self.time_spent > self.allotted_time:
-            self.status = '4'  # Completed
+        for rec in self:
+            if self.time_spent <= 0:
+                repair_stage = self.env['cwm.repair.stage'].search([('sequence', '=', '10')], limit=1)
+                self.stage_id = repair_stage
+            elif 0 < self.time_spent < self.allotted_time:
+                repair_stage = self.env['cwm.repair.stage'].search([('sequence', '=', '11')], limit=1)
+                self.stage_id = repair_stage
+                car_stage = self.env['cwm.car.stage'].search([('sequence', '=', '11')], limit=1)
+                self.car_id.stage_id = car_stage
+            elif self.time_spent > self.allotted_time:
+                repair_stage = self.env['cwm.repair.stage'].search([('sequence', '=', '13')], limit=1)
+                self.stage_id = repair_stage
 
     @api.depends('time_spent', 'allotted_time', 'task_ids')
     def _compute_spent_time(self):

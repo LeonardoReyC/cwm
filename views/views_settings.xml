@@ -214,8 +214,58 @@
 ###################################################
 ############# INHERIT REPAIR STAGE ################
 -->
-    <menuitem name="Repair Stages" id="cwm.menu_repair_stages" parent="cwm.settings"
-              action="project.project_project_stage_configure"/>
+    <!--<menuitem name="Repair Stages" id="cwm.menu_repair_stages" parent="cwm.settings"
+              action="project.project_project_stage_configure"/>-->
+
+    <!--Tree view-->
+    <record id="cwm.list_repair_stage" model="ir.ui.view">
+      <field name="name">Repair stage list</field>
+      <field name="model">cwm.repair.stage</field>
+      <field name="arch" type="xml">
+        <tree editable="bottom" sample="1">
+          <field name="sequence" widget="handle"/>
+          <field name="name"/>
+          <field name="fold" optional="show"/>
+        </tree>
+      </field>
+    </record>
+
+    <!--Kanban view-->
+    <record id="cwm.kanban_repair_stage" model="ir.ui.view">
+      <field name="name">Repair stage kanban</field>
+      <field name="model">cwm.repair.stage</field>
+      <field name="arch" type="xml">
+        <kanban class="o_kanban_mobile" sample="1"
+                quick_create_view="project.project_project_stage_view_form_quick_create">
+          <field name="name"/>
+          <field name="fold"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="o_kanban_record oe_kanban_global_click">
+                <strong>
+                  <field name="name"/>
+                </strong>
+                <br/>
+                <span class="text-muted">
+                  Folded in Kanban <field name="fold"/>
+                </span>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <!-- Action-->
+    <record model="ir.actions.act_window" id="cwm.action_repair_stage">
+      <field name="name">Repair stage window</field>
+      <field name="res_model">cwm.repair.stage</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <!-- Menú  -->
+    <menuitem name="Repair Stages" id="cwm.menu_repair_stage" parent="cwm.settings"
+              action="cwm.action_repair_stage"/>
 
 <!--
 ###################################################
@@ -270,6 +320,23 @@
     <!-- Menú  -->
     <menuitem name="Car Stages" id="cwm.menu_car_stage" parent="cwm.settings"
               action="cwm.action_car_stage"/>
+
+<!--
+###################################################
+###################### COLORS #####################
+-->
+
+    <!-- Action-->
+    <record model="ir.actions.act_window" id="cwm.action_color">
+      <field name="name">Color window</field>
+      <field name="res_model">cwm.color</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menú  -->
+    <menuitem name="Colors" id="cwm.menu_color" parent="cwm.settings"
+              action="cwm.action_color"/>
+
 
 
   </data>
