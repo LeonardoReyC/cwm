@@ -35,9 +35,12 @@
         'views/views_customer.xml',
         'views/views_workers.xml',
         'data/data.xml',
+        'data/crons.xml',
         'views/views_repair.xml',
         'views/views_settings.xml',
+        'views/views_cars_api.xml',
         'security/ir.model.access.csv',
+        'reports/repairs.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

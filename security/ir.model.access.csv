@@ -11,3 +11,4 @@ access_cwm_rates,cwm.rates,model_cwm_rates,base.group_user,1,1,1,1
 access_cwm_color,cwm.color,model_cwm_color,base.group_user,1,1,1,1
 access_cwm_repair_tasks,cwm.repair.tasks,model_cwm_repair_task,base.group_user,1,1,1,1
 access_cwm_repair_indicator,cwm.repair.indicator,model_cwm_repair_indicator,base.group_user,1,1,1,1
+access_cwm_cars_api,cwm.cars.api,model_cwm_cars_api,base.group_user,1,1,1,1

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models
+from odoo import fields
+from odoo import api
 
 
 class CarWorkshopManager(models.Model):
@@ -17,9 +19,3 @@ class CarWorkshopManager(models.Model):
         required=True,
         help="Workshop Address"
     )
-
-
-#     @api.depends('value')
-#     def _value_pc(self):
-#         for record in self:
-#             record.value2 = float(record.value) / 100

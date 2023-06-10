@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-
-
 from odoo import models
 from odoo import fields
 from odoo import api
 from odoo import _
 from odoo.exceptions import UserError
 from odoo.exceptions import ValidationError
+import requests
 
 
 class CwmRates(models.Model):
@@ -38,24 +37,10 @@ class CwmRates(models.Model):
         string="Associated repairs"
     )
 
+
 class CwmSequence(models.Model):
     _name = 'cwm.sequence'
     _description = 'Sequence'
-
-    def get_sequence(self, seq_name):
-        seq = self.env['cwm.sequence'].search([('name', '=', seq_name)])
-        if not seq:
-            raise UserError(_("Sequence %s not found.") % seq_name)
-        if str(seq.suffix) != str(fields.Date.today().year):
-            seq.suffix = str(fields.Date.today().year)
-            seq.actual_value = 0
-            seq.next_value = 0
-
-        sequence = seq.prefix + "-" + str(str(seq.next_value).rjust(5, '0')) + " /" + seq.suffix
-        seq.actual_value = seq.next_value
-        seq.next_value += 1
-        seq.write({'next_value': seq.next_value, 'actual_value': seq.actual_value})
-        return sequence
 
     name = fields.Char(
         string="Seq Name",
@@ -80,6 +65,22 @@ class CwmSequence(models.Model):
         help="The Next value"
     )
 
+    # Sequence generator
+    def get_sequence(self, seq_name):
+        seq = self.env['cwm.sequence'].search([('name', '=', seq_name)])
+        if not seq:
+            raise UserError(_("Sequence %s not found.") % seq_name)
+        if str(seq.suffix) != str(fields.Date.today().year):
+            seq.suffix = str(fields.Date.today().year)
+            seq.actual_value = 0
+            seq.next_value = 0
+
+        sequence = seq.prefix + "-" + str(str(seq.next_value).rjust(5, '0')) + " /" + seq.suffix
+        seq.actual_value = seq.next_value
+        seq.next_value += 1
+        seq.write({'next_value': seq.next_value, 'actual_value': seq.actual_value})
+        return sequence
+
 
 class CarBrands(models.Model):
     _name = 'cwm.car.brand'
@@ -96,10 +97,15 @@ class CarBrands(models.Model):
         string="Model list"
     )
 
+    # Auto capitalize brand names
     @api.onchange('name')
     def onchange_car_brand(self):
         if self.name:
             self.name = self.name.capitalize()
+
+    def consult_api_models(self):
+        brand = self.name
+        self.env['cwm.cars.api'].consult_brands(brand)
 
 
 class CarModels(models.Model):
@@ -116,6 +122,7 @@ class CarModels(models.Model):
         string="Brand"
     )
 
+    # Auto capitalize model names
     @api.onchange('name')
     def onchange_car_model(self):
         if self.name:
@@ -159,8 +166,7 @@ class CwmCarStage(models.Model):
     )
     fold = fields.Boolean(
         string='Folded in Kanban',
-        help="If enabled, this stage will be displayed as folded in the Kanban view of your projects. "
-             "Projects in a folded stage are considered as closed."
+        help="If enabled, this stage will be displayed as folded in the Kanban view."
     )
 
 
@@ -178,11 +184,11 @@ class CwmCarStage(models.Model):
     )
     fold = fields.Boolean(
         string='Folded in Kanban',
-        help="If enabled, this stage will be displayed as folded in the Kanban view of your projects. "
-             "Projects in a folded stage are considered as closed."
+        help="If enabled, this stage will be displayed as folded in the Kanban view."
     )
 
-class CwmCarStage(models.Model):
+
+class CwmCarColor(models.Model):
     _name = 'cwm.color'
     _description = 'Description color'
 
@@ -195,10 +201,12 @@ class CwmCarStage(models.Model):
         string="Enabled color",
     )
 
+    # Capitalize colors whe a call is made from other model
     def _inverse_general_color(self):
         if self.name:
             self.name = self.name.capitalize()
 
+    # Capitalize colores
     @api.onchange('name')
     def onchange_general_color(self):
         if self.name:

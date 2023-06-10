@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <data>
 
@@ -57,7 +58,7 @@
 
     <!--Car Stages-->
     <record id="11" model="cwm.car.stage">
-        <field name="name">Pending appointment</field>
+        <field name="name">Appointment</field>
         <field name="sequence">10</field>
     </record>
 

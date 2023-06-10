@@ -3,16 +3,18 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class CwmCars(models.Model):
     _name = 'cwm.car'
     _description = 'Cars'
     _rec_name = "plate_number"
+    _sql_constraints = [
+        ('plate_number', 'unique (plate_number)', 'The plate number is in use!'),
+        ('vin_number', 'unique (vin_number)', 'The vin number is in use!')
+    ]
 
     plate_number = fields.Char(
         string="Plate Number",
         required=True,
-        unique=True,
         help="Plate vehicle number",
         placeholder="Plate Number"
     )
@@ -45,7 +47,6 @@ class CwmCars(models.Model):
     vin_number = fields.Char(
         string="Vin Num",
         required=True,
-        unique=True,
         help="Unique vehícle number"
     )
     owner = fields.Many2one(
@@ -55,7 +56,7 @@ class CwmCars(models.Model):
     )
     repair_ids = fields.One2many(
         comodel_name="cwm.repair",
-        inverse_name="car_id",
+        inverse_name="vehicle_id",
         string="Repairs"
     )
     stage_id = fields.Many2one(
@@ -66,14 +67,17 @@ class CwmCars(models.Model):
     body_color = fields.Many2one(
         string="Car color",
         comodel_name="cwm.color",
+        required=True,
     )
 
+    # Return automatic unfolded stages for kanban view
     @api.model
     def _read_group_stage_ids(self, stages, domain, order):
         stage_obj = self.env['cwm.car.stage']
-        folded_stages = stage_obj.search([('fold', '=', False)])
-        return folded_stages
+        unfolded_stages = stage_obj.search([('fold', '=', False)])
+        return unfolded_stages
 
+    # Check vim unique vehicle number length
     @api.onchange('vin_number')
     def onchange_check_vin_number_length(self):
         if self.vin_number:
@@ -81,15 +85,9 @@ class CwmCars(models.Model):
                 raise ValidationError('Vin number must be 17 characters.')
             self.vin_number = self.vin_number.upper()
 
+    # Set the plate number to uppercase
     @api.onchange('plate_number', 'brand_id')
     def onchange_plate_number(self):
         if self.plate_number:
             self.plate_number = self.plate_number.upper()
 
-"""
-    @api.constrains('vin_number')
-    def _check_vin_number_length(self):
-        for rec in self:
-            if len(rec.vin_number) != 17:
-                raise ValidationError('Vin number must be 17 characters.')
-"""

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# TODO odoo.odoo
-from odoo import models, fields, api, _
+from odoo import models
+from odoo import fields
+from odoo import api
+from odoo import _
 from odoo.exceptions import UserError
+
 
 class CwmRepair(models.Model):
     _name = 'cwm.repair'
@@ -29,9 +32,9 @@ class CwmRepair(models.Model):
         string='OR',
         readonly=True
     )
-    car_id = fields.Many2one(
+    vehicle_id = fields.Many2one(
         comodel_name='cwm.car',
-        string="Car",
+        string="Vehicle",
         required=True,
     )
     budget = fields.Monetary(
@@ -77,13 +80,30 @@ class CwmRepair(models.Model):
         comodel_name="cwm.repair.stage",
         group_expand='_read_group_stage_ids',
     )
+    start_date = fields.Datetime(
+        string="Start date",
+        help="Moment when the repair starts"
+    )
+    end_date = fields.Datetime(
+        string="End date",
+        help="Moment when the repair is finished"
+    )
 
+    # Automatic end stage set once end date has set
+    @api.constrains('end_date')
+    def repair_completed(self):
+        for rec in self:
+            if rec.end_date:
+                rec.stage_id = self.env['cwm.repair.stage'].search([('sequence', '=', '14')], limit=1)
+
+    # Unfold stages return
     @api.model
-    def _read_group_stage_ids(self, stages, domain, order):
+    def _read_group_stage_ids(self,groups, domain, order):
         stage_obj = self.env['cwm.repair.stage']
-        folded_stages = stage_obj.search([('fold', '=', False)])
-        return folded_stages
+        unfolded_stages = stage_obj.search([('fold', '=', False)])
+        return unfolded_stages
 
+    # Set color ribbon on kanban based on the difference between the budget and profit fields
     @api.constrains('profit', 'budget')
     def _compute_color(self):
         low = self.env['cwm.repair.indicator'].search([('name', '=', 'Low')])
@@ -101,9 +121,7 @@ class CwmRepair(models.Model):
             else:
                 rec.color = ok.assigned_color
 
-    def _expand_states(self, state, domain, order):
-        return [key for key, val in type(self).status.selection]
-
+    # Profit calculation
     @api.depends('time_spent', 'allotted_time')
     def _compute_profit(self):
         for rep in self:
@@ -112,6 +130,7 @@ class CwmRepair(models.Model):
             for task in rep.task_ids:
                 rep.profit -= task.cost
 
+    # Automatic change of stage based on time consumed
     @api.onchange('time_spent', 'allotted_time')
     def _onchange_time_spent_allotted_time(self):
         for rec in self:
@@ -122,23 +141,29 @@ class CwmRepair(models.Model):
                 repair_stage = self.env['cwm.repair.stage'].search([('sequence', '=', '11')], limit=1)
                 self.stage_id = repair_stage
                 car_stage = self.env['cwm.car.stage'].search([('sequence', '=', '11')], limit=1)
-                self.car_id.stage_id = car_stage
+                self.vehicle_id.stage_id = car_stage
             elif self.time_spent > self.allotted_time:
                 repair_stage = self.env['cwm.repair.stage'].search([('sequence', '=', '13')], limit=1)
                 self.stage_id = repair_stage
 
+    # Calculation of total time spent based on tasks performed and assignment
+    # of start date based on first task performed
     @api.depends('time_spent', 'allotted_time', 'task_ids')
     def _compute_spent_time(self):
         for rep in self:
             rep.time_spent = 0.0
             for task in rep.task_ids:
+                if not rep.start_date:
+                    rep.start_date = fields.Datetime.now()
                 rep.time_spent += task.time_spent
 
+    # Calculation of the budget allocated based on time and rate
     @api.depends('budget', 'allotted_time')
     def _compute_budget(self):
         for rec in self:
             rec.budget = (rec.rate_id.rate * rec.allotted_time)
 
+    # Sequence number generation at repair creation
     @api.model
     def create(self, vals):
         seq_name = 'Repairs'
@@ -182,6 +207,7 @@ class CwmRepairTasks(models.Model):
         default=lambda self: self.env.ref('base.EUR')
     )
 
+    # Calculation of the cost of performing the task based on the employee's salary.
     @api.constrains('time_spent')
     def calculate_cost(self):
         for rec in self:

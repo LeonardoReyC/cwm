@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <data>
 <!--##### REPAIR MODEL-->
@@ -21,7 +22,7 @@
                   </strong> <br/>
                   Budget: <font color="##3F6BB9"><b><br/><field name="budget"/>€</b></font><br/>
                   Profit: <font color="##3F6BB9"><b><br/><field name="profit"/>€</b></font><br/>
-                  <field name="car_id"/>€<br/>
+                  <field name="vehicle_id"/>€<br/>
                 </div>
                 <div class="o_kanban_secondary">
                   <field name="time_spent" widget="gauge"
@@ -42,7 +43,7 @@
       <field name="arch" type="xml">
         <tree>
           <field name="rep_num"/>
-          <field name="car_id"/>
+          <field name="vehicle_id"/>
           <field name="name"/>
           <field name="allotted_time" widget="float_time"/>
           <field name="budget"/>
@@ -66,8 +67,10 @@
               <group string="Repair info">
                 <field name="sequence"/>
                 <field name="name"/>
-                <field name="car_id"/>
+                <field name="vehicle_id"/>
                 <field name="stage_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
               </group>
               <group string="Time and economy">
                 <field name="rate_id"/>
@@ -98,11 +101,25 @@
       </field>
     </record>
 
+    <!-- Calendar view-->
+    <record model="ir.ui.view" id="cwm.calendar_repair">
+      <field name="name">Repair calendar</field>
+      <field name="model">cwm.repair</field>
+      <field name="arch" type="xml">
+        <calendar string="Repair Calendar" date_start="start_date" date_stop="end_date" color="color"
+                  mode="month" quick_add="False" create="false" event_open_popup="True" delete="false">
+          <field name="rep_num"/>
+          <field name="vehicle_id" filters="1"/>
+          <field name="rate_id" filters="1"/>
+        </calendar>
+      </field>
+    </record>
+
     <!-- Action -->
     <record model="ir.actions.act_window" id="cwm.action_repair">
       <field name="name">Repair window</field>
       <field name="res_model">cwm.repair</field>
-      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_mode">kanban,tree,form,calendar</field>
     </record>
 
 

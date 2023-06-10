@@ -1,0 +1,102 @@
+<odoo>
+    <data>
+        <report id="repairs"
+                model="cwm.repair"
+                string="Repair Report"
+                report_type="qweb-pdf"
+                name="cwm.repairs_report"
+                file="cwm.repairs_report"
+                menu="True"/>
+
+        <template id="repairs_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <style>
+                        body {
+                        margin: 20px;
+                        background-size: cover;
+                        background-position: center;
+                        background-attachment: fixed;
+                        font-family: Arial, sans-serif;
+                        color: #333;
+                        }
+
+                        .titulo {
+                        font-size: 24px;
+                        font-weight: bold;
+                        margin-bottom: 20px;
+                        text-align: center;
+                        }
+
+                        .datos-personales {
+                        margin-bottom: 20px;
+                        }
+
+                        .tabla-acciones {
+                        width: 100%;
+                        margin-bottom: 20px;
+                        border-collapse: collapse;
+                        }
+
+                        .tabla-acciones th, .tabla-acciones td {
+                        padding: 10px;
+                        border: 1px solid #ccc;
+                        }
+
+                        .tabla-acciones th {
+                        background-color: #f9f9f9;
+                        font-weight: bold;
+                        text-align: left;
+                        }
+
+                        .tabla-acciones tr:nth-child(even) {
+                        background-color: #f2f2f2;
+                        }
+                    </style>
+                    <div class="page">
+                        <body>
+                            <h1>REPAIR REPORT</h1>
+                            <h2>General info:</h2>
+                            <pre>Operation Type:  <strong><t t-esc="dict(o.fields_get(allfields=['name'])['name']
+                                                                    ['selection'])[o.name]"/></strong></pre>
+                            <pre>Repair number:   <strong><t t-esc="o.rep_num"/></strong></pre>
+                            <pre>Vehicle id:      <strong><t t-esc="o.vehicle_id.plate_number"/></strong></pre>
+                            <pre>Start date:      <strong><t t-esc="o.start_date"/></strong></pre>
+                            <pre>End Date:        <strong><t t-esc="o.end_date"/></strong></pre>
+                            <h2>Economy Info:</h2>
+                            <pre>Rate aplicable:  <strong><t t-esc="o.rate_id.name"/></strong></pre>
+                            <pre>Alloted time:    <strong><t t-esc="o.allotted_time"
+                                                             t-options='{"widget": "float_time"}'/></strong></pre>
+                            <pre>Budget:          <strong><t t-esc="o.budget"/> Eur</strong></pre>
+                            <pre>Spent Time:      <strong><t t-esc="o.time_spent"
+                                                             t-options='{"widget": "float_time"}'/></strong></pre>
+                            <pre>Profit:          <strong><t t-esc="o.profit"/> Eur</strong></pre>
+                            <table class="tabla-acciones">
+                                <thead>
+                                    <tr>
+                                        <th>Acction</th>
+                                        <th>Worker</th>
+                                        <th>Time Spent</th>
+                                        <th>Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.task_ids" t-as="tasks">
+                                        <tr>
+                                            <td><t t-esc="tasks.name"/></td>
+                                            <td><t t-esc="tasks.worker_id.name"/></td>
+                                            <td><t t-esc="tasks.time_spent" t-options='{"widget": "float_time"}'/></td>
+                                            <td><t t-esc="tasks.cost"/> Eur</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </body>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

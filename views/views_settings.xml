@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <data>
 
@@ -33,6 +34,9 @@
       <field name="model">cwm.car.brand</field>
       <field name="arch" type="xml">
         <form>
+          <header>
+                <button name="consult_api_models" string="Update list" type="object"/>
+            </header>
           <sheet>
             <group>
               <field name="name"/>

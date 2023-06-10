@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
   <data>
 
@@ -70,6 +71,7 @@
                 <field name="registration_date"/>
                 <field name="vin_number" style="text-transform: uppercase;"/>
                 <field name="body_color"/>
+                <field name="stage_id"/>
               </group>
               <group string="Status Information">
                 <field name="next_appointment"/>
@@ -87,12 +89,26 @@
       </field>
     </record>
 
+    <!-- Calendar view-->
+    <record model="ir.ui.view" id="cwm.calendar_car">
+      <field name="name">Car calendar</field>
+      <field name="model">cwm.car</field>
+      <field name="arch" type="xml">
+        <calendar string="Car in Calendar" date_start="next_appointment"
+                  mode="week" quick_add="False" create="false" event_open_popup="True" delete="false">
+          <field name="plate_number"/>
+          <field name="owner"/>
+          <field name="brand_id" filters="1"/>
+          <field name="model_id"/>
+        </calendar>
+      </field>
+    </record>
 
     <!-- Action -->
     <record model="ir.actions.act_window" id="cwm.action_car">
       <field name="name">Car window</field>
       <field name="res_model">cwm.car</field>
-      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_mode">kanban,tree,form,calendar</field>
     </record>
 
     <!-- Menú -->
